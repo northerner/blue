@@ -326,7 +326,7 @@ fn view(model: Model) -> Element(Msg) {
                     ]),
                   ]
                   Some(UnsupportedEmbed(embed_type)) -> [
-                    html.small([], [
+                    html.pre([], [
                       html.text("Unsupported embed type: " <> embed_type),
                     ]),
                   ]

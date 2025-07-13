@@ -3591,6 +3591,9 @@ function li(attrs, children) {
 function p(attrs, children) {
   return element2("p", attrs, children);
 }
+function pre(attrs, children) {
+  return element2("pre", attrs, children);
+}
 function ul(attrs, children) {
   return element2("ul", attrs, children);
 }
@@ -7441,7 +7444,7 @@ function view(model) {
                               } else {
                                 let embed_type = $1.embed_type;
                                 return toList([
-                                  small(
+                                  pre(
                                     toList([]),
                                     toList([
                                       text3(
