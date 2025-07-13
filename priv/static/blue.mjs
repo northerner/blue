@@ -183,15 +183,15 @@ var BitArray = class {
       }
     } else {
       for (let i = 0; i < wholeByteCount; i++) {
-        const a = bitArrayByteAt(this.rawBuffer, this.bitOffset, i);
+        const a2 = bitArrayByteAt(this.rawBuffer, this.bitOffset, i);
         const b = bitArrayByteAt(other.rawBuffer, other.bitOffset, i);
-        if (a !== b) {
+        if (a2 !== b) {
           return false;
         }
       }
       const trailingBitsCount = this.bitSize % 8;
       if (trailingBitsCount) {
-        const a = bitArrayByteAt(
+        const a2 = bitArrayByteAt(
           this.rawBuffer,
           this.bitOffset,
           wholeByteCount
@@ -202,7 +202,7 @@ var BitArray = class {
           wholeByteCount
         );
         const unusedLowBitCount = 8 - trailingBitsCount;
-        if (a >> unusedLowBitCount !== b >> unusedLowBitCount) {
+        if (a2 >> unusedLowBitCount !== b >> unusedLowBitCount) {
           return false;
         }
       }
@@ -252,9 +252,9 @@ function bitArrayByteAt(buffer, bitOffset, index5) {
   if (bitOffset === 0) {
     return buffer[index5] ?? 0;
   } else {
-    const a = buffer[index5] << bitOffset & 255;
+    const a2 = buffer[index5] << bitOffset & 255;
     const b = buffer[index5 + 1] >> 8 - bitOffset;
-    return a | b;
+    return a2 | b;
   }
 }
 var UtfCodepoint = class {
@@ -572,23 +572,23 @@ var Error = class extends Result {
 function isEqual(x, y) {
   let values3 = [x, y];
   while (values3.length) {
-    let a = values3.pop();
+    let a2 = values3.pop();
     let b = values3.pop();
-    if (a === b) continue;
-    if (!isObject(a) || !isObject(b)) return false;
-    let unequal = !structurallyCompatibleObjects(a, b) || unequalDates(a, b) || unequalBuffers(a, b) || unequalArrays(a, b) || unequalMaps(a, b) || unequalSets(a, b) || unequalRegExps(a, b);
+    if (a2 === b) continue;
+    if (!isObject(a2) || !isObject(b)) return false;
+    let unequal = !structurallyCompatibleObjects(a2, b) || unequalDates(a2, b) || unequalBuffers(a2, b) || unequalArrays(a2, b) || unequalMaps(a2, b) || unequalSets(a2, b) || unequalRegExps(a2, b);
     if (unequal) return false;
-    const proto = Object.getPrototypeOf(a);
+    const proto = Object.getPrototypeOf(a2);
     if (proto !== null && typeof proto.equals === "function") {
       try {
-        if (a.equals(b)) continue;
+        if (a2.equals(b)) continue;
         else return false;
       } catch {
       }
     }
-    let [keys2, get3] = getters(a);
-    for (let k of keys2(a)) {
-      values3.push(get3(a, k), get3(b, k));
+    let [keys2, get3] = getters(a2);
+    for (let k of keys2(a2)) {
+      values3.push(get3(a2, k), get3(b, k));
     }
   }
   return true;
@@ -601,33 +601,33 @@ function getters(object4) {
     return [(x) => [...extra, ...Object.keys(x)], (x, y) => x[y]];
   }
 }
-function unequalDates(a, b) {
-  return a instanceof Date && (a > b || a < b);
+function unequalDates(a2, b) {
+  return a2 instanceof Date && (a2 > b || a2 < b);
 }
-function unequalBuffers(a, b) {
-  return !(a instanceof BitArray) && a.buffer instanceof ArrayBuffer && a.BYTES_PER_ELEMENT && !(a.byteLength === b.byteLength && a.every((n, i) => n === b[i]));
+function unequalBuffers(a2, b) {
+  return !(a2 instanceof BitArray) && a2.buffer instanceof ArrayBuffer && a2.BYTES_PER_ELEMENT && !(a2.byteLength === b.byteLength && a2.every((n, i) => n === b[i]));
 }
-function unequalArrays(a, b) {
-  return Array.isArray(a) && a.length !== b.length;
+function unequalArrays(a2, b) {
+  return Array.isArray(a2) && a2.length !== b.length;
 }
-function unequalMaps(a, b) {
-  return a instanceof Map && a.size !== b.size;
+function unequalMaps(a2, b) {
+  return a2 instanceof Map && a2.size !== b.size;
 }
-function unequalSets(a, b) {
-  return a instanceof Set && (a.size != b.size || [...a].some((e) => !b.has(e)));
+function unequalSets(a2, b) {
+  return a2 instanceof Set && (a2.size != b.size || [...a2].some((e) => !b.has(e)));
 }
-function unequalRegExps(a, b) {
-  return a instanceof RegExp && (a.source !== b.source || a.flags !== b.flags);
+function unequalRegExps(a2, b) {
+  return a2 instanceof RegExp && (a2.source !== b.source || a2.flags !== b.flags);
 }
-function isObject(a) {
-  return typeof a === "object" && a !== null;
+function isObject(a2) {
+  return typeof a2 === "object" && a2 !== null;
 }
-function structurallyCompatibleObjects(a, b) {
-  if (typeof a !== "object" && typeof b !== "object" && (!a || !b))
+function structurallyCompatibleObjects(a2, b) {
+  if (typeof a2 !== "object" && typeof b !== "object" && (!a2 || !b))
     return false;
   let nonstructural = [Promise, WeakSet, WeakMap, Function];
-  if (nonstructural.some((c) => a instanceof c)) return false;
-  return a.constructor === b.constructor;
+  if (nonstructural.some((c) => a2 instanceof c)) return false;
+  return a2.constructor === b.constructor;
 }
 function makeError(variant, file, module, line, fn, message2, extra) {
   let error = new globalThis.Error(message2);
@@ -659,8 +659,8 @@ function hashByReference(o) {
   referenceMap.set(o, hash);
   return hash;
 }
-function hashMerge(a, b) {
-  return a ^ b + 2654435769 + (a << 6) + (a >> 2) | 0;
+function hashMerge(a2, b) {
+  return a2 ^ b + 2654435769 + (a2 << 6) + (a2 >> 2) | 0;
 }
 function hashString(s) {
   let hash = 0;
@@ -1364,8 +1364,8 @@ var None = class extends CustomType {
 };
 function to_result(option, e) {
   if (option instanceof Some) {
-    let a = option[0];
-    return new Ok(a);
+    let a2 = option[0];
+    return new Ok(a2);
   } else {
     return new Error(e);
   }
@@ -2025,6 +2025,24 @@ function map2(decoder, transformer) {
     }
   );
 }
+function then$(decoder, next) {
+  return new Decoder(
+    (dynamic_data) => {
+      let $ = decoder.function(dynamic_data);
+      let data = $[0];
+      let errors = $[1];
+      let decoder$1 = next(data);
+      let $1 = decoder$1.function(dynamic_data);
+      let layer = $1;
+      let data$1 = $1[0];
+      if (errors instanceof Empty) {
+        return layer;
+      } else {
+        return [data$1, errors];
+      }
+    }
+  );
+}
 function run_decoders(loop$data, loop$failure, loop$decoders) {
   while (true) {
     let data = loop$data;
@@ -2104,8 +2122,8 @@ function list2(inner) {
       return list(
         data,
         inner.function,
-        (p, k) => {
-          return push_path(p, toList([k]));
+        (p2, k) => {
+          return push_path(p2, toList([k]));
         },
         0,
         toList([])
@@ -2251,6 +2269,21 @@ function optional_field(key, default$, field_decoder, next) {
     }
   );
 }
+function optionally_at(path, default$, inner) {
+  return new Decoder(
+    (data) => {
+      return index3(
+        path,
+        toList([]),
+        inner.function,
+        data,
+        (_, _1) => {
+          return [default$, toList([])];
+        }
+      );
+    }
+  );
+}
 
 // build/dev/javascript/gleam_stdlib/gleam/result.mjs
 function is_ok(result) {
@@ -2287,16 +2320,16 @@ function try$(result, fun) {
     return new Error(e);
   }
 }
-function then$(result, fun) {
+function then$2(result, fun) {
   return try$(result, fun);
 }
 function unwrap_both(result) {
   if (result instanceof Ok) {
-    let a = result[0];
-    return a;
+    let a2 = result[0];
+    return a2;
   } else {
-    let a = result[0];
-    return a;
+    let a2 = result[0];
+    return a2;
   }
 }
 function replace_error(result, error) {
@@ -2481,10 +2514,10 @@ var option_none = /* @__PURE__ */ new None();
 var GT = /* @__PURE__ */ new Gt();
 var LT = /* @__PURE__ */ new Lt();
 var EQ = /* @__PURE__ */ new Eq();
-function compare3(a, b) {
-  if (a.name === b.name) {
+function compare3(a2, b) {
+  if (a2.name === b.name) {
     return EQ;
-  } else if (a.name < b.name) {
+  } else if (a2.name < b.name) {
     return LT;
   } else {
     return GT;
@@ -2654,8 +2687,8 @@ function prepare(attributes) {
       return attributes;
     } else {
       let _pipe = attributes;
-      let _pipe$1 = sort(_pipe, (a, b) => {
-        return compare3(b, a);
+      let _pipe$1 = sort(_pipe, (a2, b) => {
+        return compare3(b, a2);
       });
       return merge(_pipe$1, empty_list);
     }
@@ -2733,6 +2766,9 @@ function width(value) {
 }
 function disabled(is_disabled) {
   return boolean_attribute("disabled", is_disabled);
+}
+function controls(show_controls) {
+  return boolean_attribute("controls", show_controls);
 }
 
 // build/dev/javascript/lustre/lustre/effect.mjs
@@ -3153,44 +3189,44 @@ function to_keyed(key, node) {
 }
 
 // build/dev/javascript/lustre/lustre/internals/equals.ffi.mjs
-var isReferenceEqual = (a, b) => a === b;
-var isEqual2 = (a, b) => {
-  if (a === b) {
+var isReferenceEqual = (a2, b) => a2 === b;
+var isEqual2 = (a2, b) => {
+  if (a2 === b) {
     return true;
   }
-  if (a == null || b == null) {
+  if (a2 == null || b == null) {
     return false;
   }
-  const type = typeof a;
+  const type = typeof a2;
   if (type !== typeof b) {
     return false;
   }
   if (type !== "object") {
     return false;
   }
-  const ctor = a.constructor;
+  const ctor = a2.constructor;
   if (ctor !== b.constructor) {
     return false;
   }
-  if (Array.isArray(a)) {
-    return areArraysEqual(a, b);
+  if (Array.isArray(a2)) {
+    return areArraysEqual(a2, b);
   }
-  return areObjectsEqual(a, b);
+  return areObjectsEqual(a2, b);
 };
-var areArraysEqual = (a, b) => {
-  let index5 = a.length;
+var areArraysEqual = (a2, b) => {
+  let index5 = a2.length;
   if (index5 !== b.length) {
     return false;
   }
   while (index5--) {
-    if (!isEqual2(a[index5], b[index5])) {
+    if (!isEqual2(a2[index5], b[index5])) {
       return false;
     }
   }
   return true;
 };
-var areObjectsEqual = (a, b) => {
-  const properties = Object.keys(a);
+var areObjectsEqual = (a2, b) => {
+  const properties = Object.keys(a2);
   let index5 = properties.length;
   if (Object.keys(b).length !== index5) {
     return false;
@@ -3200,7 +3236,7 @@ var areObjectsEqual = (a, b) => {
     if (!Object.hasOwn(b, property3)) {
       return false;
     }
-    if (!isEqual2(a[property3], b[property3])) {
+    if (!isEqual2(a2[property3], b[property3])) {
       return false;
     }
   }
@@ -3552,8 +3588,14 @@ function div(attrs, children) {
 function li(attrs, children) {
   return element2("li", attrs, children);
 }
+function p(attrs, children) {
+  return element2("p", attrs, children);
+}
 function ul(attrs, children) {
   return element2("ul", attrs, children);
+}
+function a(attrs, children) {
+  return element2("a", attrs, children);
 }
 function small(attrs, children) {
   return element2("small", attrs, children);
@@ -3566,6 +3608,12 @@ function strong(attrs, children) {
 }
 function img(attrs) {
   return element2("img", attrs, empty_list);
+}
+function video(attrs, children) {
+  return element2("video", attrs, children);
+}
+function source(attrs) {
+  return element2("source", attrs, empty_list);
 }
 function button(attrs, children) {
   return element2("button", attrs, children);
@@ -5320,13 +5368,13 @@ function makeEffect(synchronous) {
     before_paint: empty_list
   };
 }
-function listAppend(a, b) {
-  if (a instanceof Empty) {
+function listAppend(a2, b) {
+  if (a2 instanceof Empty) {
     return b;
   } else if (b instanceof Empty) {
-    return a;
+    return a2;
   } else {
-    return append(a, b);
+    return append(a2, b);
   }
 }
 
@@ -6446,14 +6494,14 @@ function to_uri(request) {
   );
 }
 function from_uri(uri) {
-  return then$(
+  return then$2(
     (() => {
       let _pipe = uri.scheme;
       let _pipe$1 = unwrap(_pipe, "");
       return scheme_from_string(_pipe$1);
     })(),
     (scheme) => {
-      return then$(
+      return then$2(
         (() => {
           let _pipe = uri.host;
           return to_result(_pipe, void 0);
@@ -6518,9 +6566,9 @@ function tap(promise, callback) {
   let _pipe = promise;
   return map_promise(
     _pipe,
-    (a) => {
-      callback(a);
-      return a;
+    (a2) => {
+      callback(a2);
+      return a2;
     }
   );
 }
@@ -6530,8 +6578,8 @@ function try_await(promise, callback) {
     _pipe,
     (result) => {
       if (result instanceof Ok) {
-        let a = result[0];
-        return callback(a);
+        let a2 = result[0];
+        return callback(a2);
       } else {
         let e = result[0];
         return resolve(new Error(e));
@@ -6769,7 +6817,7 @@ function expect_json(decoder, handler) {
   return expect_json_response(
     (result) => {
       let _pipe = result;
-      let _pipe$1 = then$(
+      let _pipe$1 = then$2(
         _pipe,
         (_capture) => {
           return decode_json_body(_capture, decoder);
@@ -6824,6 +6872,10 @@ var ApiReturnedFeed = class extends CustomType {
   }
 };
 var UserClickedGetFeed = class extends CustomType {
+  constructor($0) {
+    super();
+    this[0] = $0;
+  }
 };
 var Model = class extends CustomType {
   constructor(fetching, posts) {
@@ -6872,6 +6924,27 @@ var ImagesEmbed = class extends CustomType {
   constructor(images) {
     super();
     this.images = images;
+  }
+};
+var VideoEmbed = class extends CustomType {
+  constructor(playlist) {
+    super();
+    this.playlist = playlist;
+  }
+};
+var RecordEmbed = class extends CustomType {
+  constructor(post_in_post) {
+    super();
+    this.post_in_post = post_in_post;
+  }
+};
+var ExternalEmbed = class extends CustomType {
+  constructor(uri, title2, description, thumb) {
+    super();
+    this.uri = uri;
+    this.title = title2;
+    this.description = description;
+    this.thumb = thumb;
   }
 };
 var UnsupportedEmbed = class extends CustomType {
@@ -6950,13 +7023,52 @@ function embed_decoder() {
     "$type",
     string2,
     (embed_type) => {
-      echo(embed_type, "src/blue.gleam", 120);
+      echo(embed_type, "src/blue.gleam", 137);
       if (embed_type === "app.bsky.embed.images#view") {
         return field(
           "images",
           list2(image_decoder()),
           (images) => {
             return success(new ImagesEmbed(images));
+          }
+        );
+      } else if (embed_type === "app.bsky.embed.video#view") {
+        return field(
+          "playlist",
+          string2,
+          (playlist) => {
+            return success(new VideoEmbed(playlist));
+          }
+        );
+      } else if (embed_type === "app.bsky.embed.external#view") {
+        return subfield(
+          toList(["external", "uri"]),
+          string2,
+          (uri) => {
+            return subfield(
+              toList(["external", "title"]),
+              string2,
+              (title2) => {
+                return subfield(
+                  toList(["external", "description"]),
+                  string2,
+                  (description) => {
+                    return then$(
+                      optionally_at(
+                        toList(["external", "thumb"]),
+                        new None(),
+                        optional(string2)
+                      ),
+                      (thumb) => {
+                        return success(
+                          new ExternalEmbed(uri, title2, description, thumb)
+                        );
+                      }
+                    );
+                  }
+                );
+              }
+            );
           }
         );
       } else {
@@ -6984,7 +7096,6 @@ function post_decoder() {
                 new None(),
                 optional(embed_decoder()),
                 (embed) => {
-                  echo(embed, "src/blue.gleam", 100);
                   return success(new Post2(uri, author, record, embed));
                 }
               );
@@ -7013,8 +7124,19 @@ function feed_response_decoder() {
     }
   );
 }
-function get_feed() {
-  let url = "https://api.bsky.app/xrpc/app.bsky.feed.getFeed?feed=at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot";
+function get_feed(name) {
+  let _block;
+  if (name === "birds") {
+    _block = "at://did:plc:ffkgesg3jsv2j7aagkzrtcvt/app.bsky.feed.generator/aaagllxbcbsje";
+  } else if (name === "beam") {
+    _block = "at://did:plc:2hgt4vfh2jxuwf5zllcbed64/app.bsky.feed.generator/aaaemobjvwlsq";
+  } else if (name === "books") {
+    _block = "at://did:plc:geoqe3qls5mwezckxxsewys2/app.bsky.feed.generator/aaabrbjcg4hmk";
+  } else {
+    _block = "at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.generator/whats-hot";
+  }
+  let path = _block;
+  let url = "https://api.bsky.app/xrpc/app.bsky.feed.getFeed?feed=" + path;
   let handler = expect_json(
     feed_response_decoder(),
     (var0) => {
@@ -7025,27 +7147,25 @@ function get_feed() {
 }
 function init(_) {
   let model = new Model(false, toList([]));
-  return [model, get_feed()];
+  return [model, get_feed("discover")];
 }
 function update2(model, msg) {
   if (msg instanceof ApiReturnedFeed) {
     let $ = msg[0];
     if ($ instanceof Ok) {
       let feed_response = $[0];
-      return [
-        new Model(false, append(feed_response.feed, model.posts)),
-        none()
-      ];
+      return [new Model(false, feed_response.feed), none()];
     } else {
       return [model, none()];
     }
   } else {
+    let feed_name = msg[0];
     return [
       (() => {
         let _record = model;
         return new Model(true, _record.posts);
       })(),
-      get_feed()
+      get_feed(feed_name)
     ];
   }
 }
@@ -7094,10 +7214,48 @@ function view(model) {
                         toList([
                           button(
                             toList([
-                              on_click(new UserClickedGetFeed()),
+                              on_click(
+                                new UserClickedGetFeed("discover")
+                              ),
                               disabled(model.fetching)
                             ]),
-                            toList([text3("Refresh")])
+                            toList([text3("Discover")])
+                          )
+                        ])
+                      ),
+                      li(
+                        toList([]),
+                        toList([
+                          button(
+                            toList([
+                              on_click(new UserClickedGetFeed("birds")),
+                              disabled(model.fetching)
+                            ]),
+                            toList([text3("Birds")])
+                          )
+                        ])
+                      ),
+                      li(
+                        toList([]),
+                        toList([
+                          button(
+                            toList([
+                              on_click(new UserClickedGetFeed("beam")),
+                              disabled(model.fetching)
+                            ]),
+                            toList([text3("BEAM")])
+                          )
+                        ])
+                      ),
+                      li(
+                        toList([]),
+                        toList([
+                          button(
+                            toList([
+                              on_click(new UserClickedGetFeed("books")),
+                              disabled(model.fetching)
+                            ]),
+                            toList([text3("Books")])
                           )
                         ])
                       )
@@ -7114,7 +7272,7 @@ function view(model) {
                       toList([]),
                       toList([
                         header(
-                          toList([class$("")]),
+                          toList([]),
                           toList([
                             span(
                               toList([]),
@@ -7158,8 +7316,140 @@ function view(model) {
                                     );
                                   }
                                 );
+                              } else if ($1 instanceof VideoEmbed) {
+                                let playlist = $1.playlist;
+                                return toList([
+                                  video(
+                                    toList([
+                                      controls(true),
+                                      style("max-width", "100%"),
+                                      style("max-height", "50vh")
+                                    ]),
+                                    toList([
+                                      source(
+                                        toList([src(playlist)])
+                                      )
+                                    ])
+                                  )
+                                ]);
+                              } else if ($1 instanceof RecordEmbed) {
+                                let post_in_post = $1.post_in_post;
+                                return toList([
+                                  article(
+                                    toList([]),
+                                    toList([
+                                      header(
+                                        toList([]),
+                                        toList([
+                                          span(
+                                            toList([]),
+                                            toList([
+                                              img(
+                                                toList([
+                                                  src(
+                                                    post_in_post.author.avatar
+                                                  ),
+                                                  width(50)
+                                                ])
+                                              )
+                                            ])
+                                          ),
+                                          strong(
+                                            toList([]),
+                                            toList([
+                                              text3(" "),
+                                              text3(
+                                                post_in_post.author.handle
+                                              )
+                                            ])
+                                          )
+                                        ])
+                                      ),
+                                      text3(post.post.record.text),
+                                      footer(
+                                        toList([]),
+                                        toList([
+                                          small(
+                                            toList([]),
+                                            toList([
+                                              text3(
+                                                post_in_post.record.created_at
+                                              )
+                                            ])
+                                          )
+                                        ])
+                                      )
+                                    ])
+                                  )
+                                ]);
+                              } else if ($1 instanceof ExternalEmbed) {
+                                let uri = $1.uri;
+                                let title2 = $1.title;
+                                let description = $1.description;
+                                let thumb = $1.thumb;
+                                return toList([
+                                  article(
+                                    toList([]),
+                                    toList([
+                                      (() => {
+                                        if (thumb instanceof Some) {
+                                          let thumb_src = thumb[0];
+                                          return img(
+                                            toList([
+                                              src(thumb_src),
+                                              style(
+                                                "max-height",
+                                                "50vh"
+                                              )
+                                            ])
+                                          );
+                                        } else {
+                                          return text3("");
+                                        }
+                                      })(),
+                                      footer(
+                                        toList([]),
+                                        toList([
+                                          a(
+                                            toList([href(uri)]),
+                                            toList([
+                                              (() => {
+                                                if (title2 === "") {
+                                                  return strong(
+                                                    toList([]),
+                                                    toList([text3(uri)])
+                                                  );
+                                                } else {
+                                                  let text4 = title2;
+                                                  return strong(
+                                                    toList([]),
+                                                    toList([text3(text4)])
+                                                  );
+                                                }
+                                              })()
+                                            ])
+                                          ),
+                                          p(
+                                            toList([]),
+                                            toList([text3(description)])
+                                          )
+                                        ])
+                                      )
+                                    ])
+                                  )
+                                ]);
                               } else {
-                                return toList([]);
+                                let embed_type = $1.embed_type;
+                                return toList([
+                                  small(
+                                    toList([]),
+                                    toList([
+                                      text3(
+                                        "Unsupported embed type: " + embed_type
+                                      )
+                                    ])
+                                  )
+                                ]);
                               }
                             } else {
                               return toList([]);
